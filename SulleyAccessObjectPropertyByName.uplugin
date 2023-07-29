@@ -1,0 +1,29 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "SulleyAccessObjectPropertyByName",
+	"Description": "This toy plugin allows you to access (get/set) object property by a specified property name.",
+	"Category": "Other",
+	"CreatedBy": "Sulley",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SulleyAccessObjectPropertyByName",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "PreLoadingScreen"
+		},
+		{
+			"Name": "SulleyAccessObjectPropertyByNameLib",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	]
+}
