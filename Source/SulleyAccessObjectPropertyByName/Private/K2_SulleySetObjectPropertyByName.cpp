@@ -333,7 +333,19 @@ UClass* UK2_SulleySetObjectPropertyByName::GetInObjectClass(const UEdGraphPin* I
 
 	if (InObjectPin->DefaultObject && InObjectPin->LinkedTo.Num() == 0)
 	{
-		InObjectClass = CastChecked<UClass>(InObjectPin->DefaultObject->StaticClass());
+		if (InObjectPin->DefaultObject->IsA<UBlueprint>())
+		{
+			UBlueprint* Blueprint = Cast<UBlueprint>(InObjectPin->DefaultObject);
+			if (Blueprint)
+			{
+				InObjectClass = Cast<UClass>(Blueprint->GeneratedClass);
+			}
+
+		}
+		else
+		{
+			InObjectClass = CastChecked<UClass>(InObjectPin->DefaultObject->GetClass());
+		}
 	}
 	else if (InObjectPin->LinkedTo.Num())
 	{

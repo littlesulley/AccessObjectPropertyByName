@@ -310,8 +310,20 @@ UClass* UK2_SulleyGetObjectPropertyByName::GetInObjectClass(const UEdGraphPin* I
 	}
 
 	if (InObjectPin->DefaultObject && InObjectPin->LinkedTo.Num() == 0)
-	{
-		InObjectClass = CastChecked<UClass>(InObjectPin->DefaultObject->StaticClass());
+	{		
+		if (InObjectPin->DefaultObject->IsA<UBlueprint>())
+		{
+			UBlueprint* Blueprint = Cast<UBlueprint>(InObjectPin->DefaultObject);
+			if (Blueprint)
+			{
+				InObjectClass = Cast<UClass>(Blueprint->GeneratedClass);
+			}
+			
+		}
+		else
+		{
+			InObjectClass = CastChecked<UClass>(InObjectPin->DefaultObject->GetClass());
+		}
 	}
 	else if (InObjectPin->LinkedTo.Num())
 	{
@@ -380,13 +392,38 @@ void UK2_SulleyGetObjectPropertyByName::CreateOutValuePin(UClass* InObjectClass,
 void UK2_SulleyGetObjectPropertyByName::OnInObjectChanged()
 {
 	UEdGraphPin* ValuePin = GetOutValuePin();
-
+	
 	if (ValuePin)
 	{
 		ValuePin->BreakAllPinLinks();
 	}
-
+	
 	OnInPinChanged();
+
+	/* How to list all property names as a dropdown?
+	 * 
+	UEdGraphPin* InObjectPin = GetInObjectPin();
+	UEdGraphPin* InPropertyPin = GetInPropertyPin();
+
+	UClass* InObjectClass = GetInObjectClass();
+	UObject* InObject = InObjectPin->DefaultObject;
+
+	TMap<FName, int> TempPropertyMap;
+
+	for (TFieldIterator<FProperty> It(InObjectClass); It; ++It)
+	{
+		TempPropertyMap.Add(TTuple<FName, int>(It->GetFName(), 0));
+		UE_LOG(LogTemp, Error, TEXT("%s"), *It->GetAuthoredName());
+	}
+
+	if (auto It = TempPropertyMap.CreateConstIterator())
+	{
+		InPropertyPin->DefaultValue = It.Key().ToString();
+	}
+
+	UEdGraph* Graph = GetGraph();
+	Graph->NotifyGraphChanged();
+	*/
 }
 
 void UK2_SulleyGetObjectPropertyByName::OnInPropertyChanged()
